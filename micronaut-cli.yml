@@ -1,0 +1,6 @@
+applicationType: default
+defaultPackage: com.pablo.users
+testFramework: junit
+sourceLanguage: java
+buildTool: gradle
+features: [annotation-api, app-name, gradle, http-client, java, java-application, junit, logback, lombok, mockito, mongo-reactive, openapi, readme, shade, testcontainers, tomcat-server, yaml]
