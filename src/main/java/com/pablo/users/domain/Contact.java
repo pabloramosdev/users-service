@@ -2,7 +2,6 @@ package com.pablo.users.domain;
 
 import io.micronaut.core.annotation.Introspected;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotBlank;
@@ -10,7 +9,6 @@ import java.util.Objects;
 
 @Getter
 @Setter
-@NoArgsConstructor
 @Introspected
 public class Contact {
 
@@ -24,7 +22,7 @@ public class Contact {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Contact contact = (Contact) o;
-        return getPhone().equals(contact.getPhone());
+        return getContactName().equals(contact.getContactName());
     }
 
     @Override

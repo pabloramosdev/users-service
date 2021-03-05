@@ -1,10 +1,7 @@
 package com.pablo.users.service;
 
 import com.mongodb.client.MongoCollection;
-import com.mongodb.client.model.Filters;
-import com.mongodb.client.model.FindOneAndUpdateOptions;
-import com.mongodb.client.model.ReturnDocument;
-import com.mongodb.client.model.Updates;
+import com.mongodb.client.model.*;
 import com.pablo.users.client.NeutrinoClient;
 import com.pablo.users.client.PhoneInfo;
 import com.pablo.users.domain.Contact;
@@ -19,6 +16,7 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -53,12 +51,12 @@ public class UserService {
     }
 
     public User upsertContacts(String userId, List<Contact> contacts) {
-        findById(userId);
         Bson filter = Filters.eq("_id", new ObjectId(userId));
         FindOneAndUpdateOptions findOneAndUpdateOptions = new FindOneAndUpdateOptions();
         findOneAndUpdateOptions.returnDocument(ReturnDocument.AFTER);
-        return usersCollection.findOneAndUpdate(filter,
-                Updates.addEachToSet("contacts", contacts), findOneAndUpdateOptions);
+        findOneAndUpdateOptions.upsert(true);
+        User updatedUser = usersCollection.findOneAndUpdate(filter, Updates.set("contacts", contacts), findOneAndUpdateOptions);
+        return Optional.ofNullable(updatedUser).orElseThrow(UserDoesNotExistsException::new);
     }
 
     public List<Contact> contactList(String userId) {
