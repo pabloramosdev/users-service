@@ -1,4 +1,4 @@
-package com.pablo.users.service;
+package com.pablo.users.config.mongo;
 
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoCollection;

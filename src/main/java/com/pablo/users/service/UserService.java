@@ -2,20 +2,24 @@ package com.pablo.users.service;
 
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.*;
-import com.pablo.users.client.NeutrinoClient;
-import com.pablo.users.client.PhoneInfo;
+import com.mongodb.client.result.InsertOneResult;
+import com.pablo.users.controller.NewUserRequest;
+import com.pablo.users.controller.NewUserResponse;
 import com.pablo.users.domain.Contact;
 import com.pablo.users.domain.User;
-import com.pablo.users.service.exception.InvalidPhoneException;
-import com.pablo.users.service.exception.PhoneRegisteredException;
-import com.pablo.users.service.exception.UserDoesNotExistsException;
+import com.pablo.users.exception.PhoneRegisteredException;
+import com.pablo.users.exception.UserDoesNotExistsException;
+import org.bson.BsonObjectId;
+import org.bson.BsonValue;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
+import javax.validation.Valid;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -24,13 +28,10 @@ import java.util.stream.Collectors;
 public class UserService {
 
     private final MongoCollection<User> usersCollection;
-    private final NeutrinoClient neutrinoClient;
 
     @Inject
-    public UserService(@Named("usersCollection") MongoCollection<User> usersCollection,
-                       NeutrinoClient neutrinoClient) {
+    public UserService(@Named("usersCollection") MongoCollection<User> usersCollection) {
         this.usersCollection = usersCollection;
-        this.neutrinoClient = neutrinoClient;
     }
 
     public User findById(String userId) {
@@ -41,13 +42,17 @@ public class UserService {
         return user;
     }
 
-    public void insert(User user) {
-        validateUserPhone(user.getPhone());
-        User existingUser = usersCollection.find(Filters.eq("phone", user.getPhone())).first();
-        if (existingUser != null) {
+    public NewUserResponse insert(@Valid NewUserRequest newUserRequest) {
+        User existingUserWithThisPhone = usersCollection.find(Filters.eq("phone", newUserRequest.getPhone())).first();
+        if (existingUserWithThisPhone != null) {
             throw new PhoneRegisteredException();
         }
-        usersCollection.insertOne(user);
+        User newUser = new User(newUserRequest.getName(), newUserRequest.getLastName(), newUserRequest.getPhone());
+        InsertOneResult insertOneResult = usersCollection.insertOne(newUser);
+        BsonValue insertedId = insertOneResult.getInsertedId();
+        BsonObjectId objectId = Objects.requireNonNull(insertedId).asObjectId();
+        String newUserId = objectId.getValue().toHexString();
+        return new NewUserResponse(newUserId, newUser.getName(), newUser.getLastName(), newUser.getPhone());
     }
 
     public User upsertContacts(String userId, List<Contact> contacts) {
@@ -66,14 +71,7 @@ public class UserService {
     public Set<Contact> commonsContacts(String userId1, String userId2) {
         List<Contact> user1Contacts = findById(userId1).getContacts();
         List<Contact> user2Contacts = findById(userId2).getContacts();
-        return user1Contacts.stream().distinct().filter(user2Contacts::contains).collect(Collectors.toSet());
-    }
-
-    private void validateUserPhone(String phone) {
-        PhoneInfo phoneInfo = neutrinoClient.validatePhone(phone);
-        if (phoneInfo != null && !phoneInfo.getValid()) {
-            throw new InvalidPhoneException();
-        }
+        return user1Contacts.stream().filter(user2Contacts::contains).collect(Collectors.toSet());
     }
 
 }

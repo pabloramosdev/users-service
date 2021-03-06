@@ -12,9 +12,7 @@ import java.util.Objects;
 @Introspected
 public class Contact {
 
-    @NotBlank
     private String contactName;
-    @NotBlank
     private String phone;
 
     @Override

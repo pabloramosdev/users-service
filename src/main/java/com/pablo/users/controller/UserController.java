@@ -8,6 +8,7 @@ import io.micronaut.http.annotation.*;
 
 import javax.inject.Inject;
 import javax.validation.Valid;
+import javax.validation.constraints.Pattern;
 import java.util.List;
 import java.util.Set;
 
@@ -22,23 +23,24 @@ public class UserController {
     }
 
     @Post
-    public HttpResponse<User> create(@Body @Valid User user) {
-        userService.insert(user);
-        return HttpResponse.created(user);
+    public HttpResponse<NewUserResponse> create(@Body @Valid NewUserRequest newUserRequest) {
+        return HttpResponse.created(userService.insert(newUserRequest));
     }
 
     @Patch("/{userId}")
-    public HttpResponse<User> update(String userId, @Body @Valid List<Contact> contacts) {
+    public HttpResponse<User> update(@Pattern(regexp = "[0-9a-fA-F]{24}]") String userId,
+                                     @Body @Valid List<Contact> contacts) {
         return HttpResponse.created(userService.upsertContacts(userId, contacts));
     }
 
     @Get("/{userId}/contacts")
-    public HttpResponse<List<Contact>> getContacts(String userId) {
+    public HttpResponse<List<Contact>> getContacts(@Pattern(regexp = "[0-9a-fA-F]{24}]") String userId) {
         return HttpResponse.ok(userService.contactList(userId));
     }
 
     @Get("/commonContacts")
-    public HttpResponse<Set<Contact>> getContacts(String userId1, String userId2) {
+    public HttpResponse<Set<Contact>> getCommonContacts(@Pattern(regexp = "[0-9a-fA-F]{24}]") String userId1,
+                                                        @Pattern(regexp = "[0-9a-fA-F]{24}]") String userId2) {
         return HttpResponse.ok(userService.commonsContacts(userId1, userId2));
     }
 
