@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.util.Objects;
 
 @Getter
@@ -15,7 +18,10 @@ import java.util.Objects;
 @Introspected
 public class Contact {
 
+    @NotBlank
+    @Size(min = 3, max = 30)
     private String contactName;
+    @Pattern(regexp = "^[0-9]{9}$")
     private String phone;
 
     @Override
