@@ -12,3 +12,5 @@ out/
 .settings
 .classpath
 .factorypath
+tomcat.8080/
+*.log

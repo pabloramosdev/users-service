@@ -10,9 +10,9 @@ micronaut:
         paths: classpath:META-INF/swagger/views/swagger-ui
         mapping: /swagger-ui/**
 
-mongodb.uri: mongodb://${MONGO_HOST}:${MONGO_PORT}
+mongodb.uri: mongodb://localhost:27017
 
 neutrino:
   url: https://neutrinoapi.net
-  userId: ${USER_ID}
-  apiKey: ${API_KEY}
+  userId: prueba-tecnica
+  apiKey: 2uJ24U2P7wEC6gynjJhKpz16QT0i1ALwTwZWTRcOXRY4eaGc

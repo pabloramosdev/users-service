@@ -1,0 +1,117 @@
+{
+	"info": {
+		"_postman_id": "217ae6e8-028c-4314-bd18-44e954e4bbd0",
+		"name": "USERS",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "INSERT USER",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"USURAIO\",\n    \"lastName\": \"APELLIDO\",\n    \"phone\": \"924258799\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UPDATE AGENDA",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n        {\n            \"contactName\": \"contacto 1\",\n            \"phone\": \"123456789\"\n        },\n        {\n            \"contactName\": \"contacto 3\",\n            \"phone\": \"987654321\"\n        }\n]",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/users/6042591fe2cbcc2e6ce612b9",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"6042591fe2cbcc2e6ce612b9"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "LISTA CONTACTOS",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/users/60443672a1d31c3a4617d90d/contacts",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"60443672a1d31c3a4617d90d",
+						"contacts"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "COMMON CONTACTS",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/users/commonContacts?userId1=60443672a1d31c3a4617d90d&userId2=60443672a1d31c3a4617d90e",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"users",
+						"commonContacts"
+					],
+					"query": [
+						{
+							"key": "userId1",
+							"value": "60443672a1d31c3a4617d90d"
+						},
+						{
+							"key": "userId2",
+							"value": "60443672a1d31c3a4617d90e"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

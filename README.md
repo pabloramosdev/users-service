@@ -1,42 +1,73 @@
-## Micronaut 2.3.3 Documentation
+## API REST Usarios y Agenda de contactos.
 
-- [User Guide](https://docs.micronaut.io/2.3.3/guide/index.html)
-- [API Reference](https://docs.micronaut.io/2.3.3/api/index.html)
-- [Configuration Reference](https://docs.micronaut.io/2.3.3/guide/configurationreference.html)
-- [Micronaut Guides](https://guides.micronaut.io/index.html)
+Api para crear nuevos usuarios y para actualizar la agenda de los mismos desde una aplicación movil.
+
 ---
 
-## Feature http-client documentation
+Se ha utilizado el siguiente stack:
 
-- [Micronaut HTTP Client documentation](https://docs.micronaut.io/latest/guide/index.html#httpClient)
+- Java 11, Gradle.
+- Micronaut.
+- MongoDB.
+- Open Api.  
+- Docker.
 
-## Feature mongo-reactive documentation
+Para compilar el proyecto ejecutar el siguiente comando:
 
-- [Micronaut Mongo Reactive Driver documentation](https://micronaut-projects.github.io/micronaut-mongodb/latest/guide/index.html)
+```shell
+gradlew build
+```
 
-- [https://docs.mongodb.com](https://docs.mongodb.com)
+Para ejecutar los tests ejecutar el siguiente comando, indicando el tipo de tests.
 
-## Feature openapi documentation
+```shell
+gradlew [-Dtest.type=all|unit|integration] test
+```
 
-- [Micronaut OpenAPI Support documentation](https://micronaut-projects.github.io/micronaut-openapi/latest/guide/index.html)
+Para los tests de integración es necesario tener una base de datos MongoDB, para ello
+se puede utilizar el docker-compose.yml para arrancar MongoDB con datos de prueba que se
+encuentran en el fichero mongo-init.js.
 
-- [https://www.openapis.org](https://www.openapis.org)
+```shell
+docker-compose up -d mongodb
+gradlew -Dtest.type=integration test
+```
 
-## Feature testcontainers documentation
+Después de ejecutar los tests de integración es conveniente eliminar el contenedor
 
-- [https://www.testcontainers.org/](https://www.testcontainers.org/)
+```shell
+docker stop mi-mongo
+docker rm mi-mongo
+```
 
-## Feature mockito documentation
+Para levantar el proyecto ejectuar:
 
-- [https://site.mockito.org](https://site.mockito.org)
+```shell
+docker-compose up -d
+```
 
-## Feature lombok documentation
+Aunque he seguido la documentación de Swagger para Micronaut
 
-- [Micronaut Project Lombok documentation](https://docs.micronaut.io/latest/guide/index.html#lombok)
+https://micronaut-projects.github.io/micronaut-openapi/latest/guide/index.html
 
-- [https://projectlombok.org/features/all](https://projectlombok.org/features/all)
+no he conseguido acceder a la interfaz gráfica de Swagger, no obstante he incluido
+una colección de Postman para poder probar los endpoints que se encuentra en la raiz del proyecto.
 
-## Feature tomcat-server documentation
+###### USERS.postman_collection.json.
 
-- [Micronaut Tomcat Server documentation](https://micronaut-projects.github.io/micronaut-servlet/1.0.x/guide/index.html#tomcat)
+#Estructura del proyecto
 
+El proyecto tiene la siguiente estructura de paquetes bajo com.pablo.users
+
+- client (Cliente Api Neutrino)
+- config (Configuración validación, handlers y mongo)
+  - handler (Manejadores de errores)
+  - mongo (Factoría para colección usuarios)
+  - validation (Factoría para validadores)
+- controller
+- domain (Entidades de dominio)
+- exception (Excepciones de negocio)
+- service (Lógica de negocio)
+
+He intentado aplicar principios SOLID durante todo el desarrollo y desacoplar lo máximo posible para que cada
+clase tenga su responsabilidad haciendo que el código sea fácilmente mantenible y testeable.
