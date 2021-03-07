@@ -28,19 +28,19 @@ public class UserController {
     }
 
     @Patch("/{userId}")
-    public HttpResponse<User> update(@Pattern(regexp = "[0-9a-fA-F]{24}]") String userId,
+    public HttpResponse<User> update(@Pattern(regexp = "[0-9a-fA-F]{24}") String userId,
                                      @Body @Valid List<Contact> contacts) {
-        return HttpResponse.created(userService.upsertContacts(userId, contacts));
+        return HttpResponse.ok(userService.upsertContacts(userId, contacts));
     }
 
     @Get("/{userId}/contacts")
-    public HttpResponse<List<Contact>> getContacts(@Pattern(regexp = "[0-9a-fA-F]{24}]") String userId) {
+    public HttpResponse<List<Contact>> getContacts(@Pattern(regexp = "[0-9a-fA-F]{24}") String userId) {
         return HttpResponse.ok(userService.contactList(userId));
     }
 
     @Get("/commonContacts")
-    public HttpResponse<Set<Contact>> getCommonContacts(@Pattern(regexp = "[0-9a-fA-F]{24}]") String userId1,
-                                                        @Pattern(regexp = "[0-9a-fA-F]{24}]") String userId2) {
+    public HttpResponse<Set<Contact>> getCommonContacts(@Pattern(regexp = "[0-9a-fA-F]{24}") String userId1,
+                                                        @Pattern(regexp = "[0-9a-fA-F]{24}") String userId2) {
         return HttpResponse.ok(userService.commonsContacts(userId1, userId2));
     }
 

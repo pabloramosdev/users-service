@@ -15,6 +15,7 @@ import org.bson.BsonValue;
 import org.bson.conversions.Bson;
 import org.bson.types.ObjectId;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 
@@ -22,7 +23,6 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 class UserServiceTest {
@@ -38,6 +38,7 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("given user id when find user by id then return the user")
     void findById() {
         FindIterable findIterable = Mockito.mock(FindIterable.class);
         when(usersCollection.find(any(Bson.class))).thenReturn(findIterable);
@@ -48,6 +49,7 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("given bad userId when find user by id then return throws UserDoesNotExistsException")
     void findByIdException() {
         FindIterable findIterable = Mockito.mock(FindIterable.class);
         when(usersCollection.find(any(Bson.class))).thenReturn(findIterable);
@@ -56,6 +58,7 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("given new user when insert it then return the user created")
     void insert() {
         FindIterable findIterable = Mockito.mock(FindIterable.class);
         InsertOneResult insertOneResult = Mockito.mock(InsertOneResult.class);
@@ -78,6 +81,7 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("given new user with existing phone when insert it then throws PhoneRegisteredException")
     void insertKO() {
         FindIterable findIterable = Mockito.mock(FindIterable.class);
 
@@ -88,6 +92,7 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("given user id and a contact list when upsert it then return updated user")
     void upsertContacts() {
         when(usersCollection.findOneAndUpdate(any(Bson.class), any(Bson.class), any(FindOneAndUpdateOptions.class)))
                 .thenReturn(new User());
@@ -96,6 +101,7 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("given non existing user id and contact list when upsert ir then throws UserDoesNotExistsException")
     void upsertContactsKO() {
         when(usersCollection.findOneAndUpdate(any(Bson.class), any(Bson.class), any(FindOneAndUpdateOptions.class)))
                 .thenReturn(null);
@@ -103,6 +109,7 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("given user id when search contact list then return contact list othe user")
     void contactList() {
         FindIterable findIterable = Mockito.mock(FindIterable.class);
         when(usersCollection.find(any(Bson.class))).thenReturn(findIterable);
@@ -115,6 +122,7 @@ class UserServiceTest {
     }
 
     @Test
+    @DisplayName("given userId1 and userId2 when search common contacts then return common contact list")
     void commonsContacts() {
         FindIterable findIterable = Mockito.mock(FindIterable.class);
         when(usersCollection.find(any(Bson.class))).thenReturn(findIterable);

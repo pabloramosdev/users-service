@@ -1,14 +1,17 @@
 package com.pablo.users.domain;
 
 import io.micronaut.core.annotation.Introspected;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.validation.constraints.NotBlank;
 import java.util.Objects;
 
 @Getter
 @Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Introspected
 public class Contact {
 

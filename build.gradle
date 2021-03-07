@@ -59,3 +59,20 @@ jar {
         )
     }
 }
+
+test {
+    String testType = System.properties['test.type']
+    if (testType == 'integration') {
+        include '**/*IT.*'
+        exclude '**/*Test.*'
+    } else if (testType == 'unit') {
+        include '**/*Test.*'
+        exclude '**/*IT.*'
+    } else if (testType == 'all') {
+        include '**/*Test.*'
+        include '**/*IT.*'
+    } else {
+        exclude '**/*Test.*'
+        exclude '**/*IT.*'
+    }
+}
